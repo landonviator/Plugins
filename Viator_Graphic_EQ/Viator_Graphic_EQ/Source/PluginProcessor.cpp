@@ -10,6 +10,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include <thread>
 
 //==============================================================================
 Viator_graphic_eqAudioProcessor::Viator_graphic_eqAudioProcessor()
@@ -311,24 +312,12 @@ void Viator_graphic_eqAudioProcessor::processBlock (AudioBuffer<float>& buffer, 
         highPassFilter.process(dsp::ProcessContextReplacing<float>(block));
     }
     
-    updateBandOneFilter(bandOneGain, 0.6f);
-    bandOneFilter.process(dsp::ProcessContextReplacing<float>(block));
-    updateBandTwoFilter(bandTwoGain, 0.6f);
-    bandTwoFilter.process(dsp::ProcessContextReplacing<float>(block));
-    updateBandThreeFilter(bandThreeGain, 0.6f);
-    bandThreeFilter.process(dsp::ProcessContextReplacing<float>(block));
-    updateBandFourFilter(bandFourGain, .6);
-    bandFourFilter.process(dsp::ProcessContextReplacing<float>(block));
-    updateBandFiveFilter(bandFiveGain, 0.6f);
-    bandFiveFilter.process(dsp::ProcessContextReplacing<float>(block));
-    updateBandSixFilter(bandSixGain, 0.6f);
-    bandSixFilter.process(dsp::ProcessContextReplacing<float>(block));
-    updateBandSevenFilter(bandSevenGain, 0.6f);
-    bandSevenFilter.process(dsp::ProcessContextReplacing<float>(block));
-    updateBandEightFilter(bandEightGain, 0.6f);
-    bandEightFilter.process(dsp::ProcessContextReplacing<float>(block));
-    updateBandNineFilter(bandNineGain, 0.6f);
-    bandNineFilter.process(dsp::ProcessContextReplacing<float>(block));
+    std::thread parallelFilterOne(&Viator_graphic_eqAudioProcessor::callFilterGroupOne, this, bandOneGain, block, bandTwoGain);
+    std::thread parallelFilterTwo(&Viator_graphic_eqAudioProcessor::callFilterGroupTwo, this, bandThreeGain, block, bandFourGain);
+    std::thread parallelFilterThree(&::Viator_graphic_eqAudioProcessor::callFilterGroupThree, this, bandFiveGain, block, bandSixGain);
+    std::thread parallelFilterFour(&Viator_graphic_eqAudioProcessor::callFilterGroupFour, this, bandSevenGain, block, bandEightGain, bandNineGain);
+    
+    
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -340,6 +329,12 @@ void Viator_graphic_eqAudioProcessor::processBlock (AudioBuffer<float>& buffer, 
             channelData[sample] = applyOutput(saturation(input), outGainScaled) * outCompesation;
         }
     }
+    
+    parallelFilterOne.join();
+    parallelFilterTwo.join();
+    parallelFilterThree.join();
+    parallelFilterFour.join();
+    
 }
 
 double Viator_graphic_eqAudioProcessor::saturation(double signal){
@@ -504,6 +499,46 @@ void Viator_graphic_eqAudioProcessor::updateBandNineFilter(float gain, float q){
     
     *bandNineFilter.state = *dsp::IIR::Coefficients<float>::makePeakFilter(lastSampleRate, 16000, q, gain);
 }
+
+void Viator_graphic_eqAudioProcessor::callFilterGroupOne(double gain1, dsp::AudioBlock<float> block, double gain2){
+    
+    updateBandOneFilter(gain1, 0.6f);
+    bandOneFilter.process(dsp::ProcessContextReplacing<float>(block));
+    updateBandTwoFilter(gain2, 0.6f);
+    bandTwoFilter.process(dsp::ProcessContextReplacing<float>(block));
+    
+}
+
+void Viator_graphic_eqAudioProcessor::callFilterGroupTwo(double gain1, dsp::AudioBlock<float> block, double gain2){
+    
+    updateBandThreeFilter(gain1, 0.6f);
+    bandThreeFilter.process(dsp::ProcessContextReplacing<float>(block));
+    updateBandFourFilter(gain2, .6);
+    bandFourFilter.process(dsp::ProcessContextReplacing<float>(block));
+    
+}
+
+void Viator_graphic_eqAudioProcessor::callFilterGroupThree(double gain1, dsp::AudioBlock<float> block, double gain2){
+    
+    updateBandFiveFilter(gain1, 0.6f);
+    bandFiveFilter.process(dsp::ProcessContextReplacing<float>(block));
+    updateBandSixFilter(gain2, 0.6f);
+    bandSixFilter.process(dsp::ProcessContextReplacing<float>(block));
+    
+}
+
+void Viator_graphic_eqAudioProcessor::callFilterGroupFour(double gain1, dsp::AudioBlock<float> block, double gain2, double gain3){
+    
+    updateBandSevenFilter(gain1, 0.6f);
+    bandSevenFilter.process(dsp::ProcessContextReplacing<float>(block));
+    updateBandEightFilter(gain2, 0.6f);
+    bandEightFilter.process(dsp::ProcessContextReplacing<float>(block));
+    updateBandNineFilter(gain3, 0.6f);
+    bandNineFilter.process(dsp::ProcessContextReplacing<float>(block));
+    
+}
+
+
 
 //==============================================================================
 bool Viator_graphic_eqAudioProcessor::hasEditor() const

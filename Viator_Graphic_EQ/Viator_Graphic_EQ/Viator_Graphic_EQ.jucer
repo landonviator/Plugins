@@ -14,8 +14,8 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="Mi2IUZ" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
-    <FILE id="YKCB7A" name="graphicEQBackground.png" compile="0" resource="1"
-          file="../../../../Desktop/graphicEQBackground.png"/>
+    <FILE id="ZS1PrR" name="graphicEQBackground.png" compile="0" resource="1"
+          file="Source/graphicEQBackground.png"/>
   </MAINGROUP>
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX">

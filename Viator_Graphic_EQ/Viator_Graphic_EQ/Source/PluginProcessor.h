@@ -12,26 +12,26 @@
 
 #include <JuceHeader.h>
 
-#define BAND_SLIDER_ONE_ID "30Hz"
-#define BAND_SLIDER_ONE_NAME "30Hz"
-#define BANDONEWIDE_ID "30Hz Wide"
-#define BANDONEWIDE_NAME "30Hz Wide"
-#define BANDONENARROW_ID "30Hz Narrow"
-#define BANDONENARROW_NAME "30Hz Narrow"
+#define BAND_SLIDER_ONE_ID "60Hz"
+#define BAND_SLIDER_ONE_NAME "60Hz"
+#define BANDONEWIDE_ID "60Hz Wide"
+#define BANDONEWIDE_NAME "60Hz Wide"
+#define BANDONENARROW_ID "60Hz Narrow"
+#define BANDONENARROW_NAME "60Hz Narrow"
 
-#define BAND_SLIDER_TWO_ID "60Hz"
-#define BAND_SLIDER_TWO_NAME "60Hz"
-#define BANDTWOWIDE_ID "60Hz Wide"
-#define BANDTWOWIDE_NAME "60Hz Wide"
-#define BANDTWONARROW_ID "60Hz Narrow"
-#define BANDTWONARROW_NAME "60Hz Narrow"
+#define BAND_SLIDER_TWO_ID "125Hz"
+#define BAND_SLIDER_TWO_NAME "125Hz"
+#define BANDTWOWIDE_ID "125Hz Wide"
+#define BANDTWOWIDE_NAME "125Hz Wide"
+#define BANDTWONARROW_ID "125Hz Narrow"
+#define BANDTWONARROW_NAME "125Hz Narrow"
 
-#define BAND_SLIDER_THREE_ID "125Hz"
-#define BAND_SLIDER_THREE_NAME "125Hz"
-#define BANDTHREEWIDE_ID "125Hz Wide"
-#define BANDTHREEWIDE_NAME "125Hz Wide"
-#define BANDTHREENARROW_ID "125Hz Narrow"
-#define BANDTHREENARROW_NAME "125Hz Narrow"
+#define BAND_SLIDER_THREE_ID "250Hx"
+#define BAND_SLIDER_THREE_NAME "250Hx"
+#define BANDTHREEWIDE_ID "250Hx Wide"
+#define BANDTHREEWIDE_NAME "250Hx Wide"
+#define BANDTHREENARROW_ID "250Hx Narrow"
+#define BANDTHREENARROW_NAME "250Hx Narrow"
 
 #define BAND_SLIDER_FOUR_ID "500Hz"
 #define BAND_SLIDER_FOUR_NAME "500Hz"
@@ -156,6 +156,11 @@ public:
     void updateBandSevenFilter(float gain, float q);
     void updateBandEightFilter(float gain, float q);
     void updateBandNineFilter(float gain, float q);
+    
+      void callFilterGroupOne(double gain1, dsp::AudioBlock<float> block, double gain2);
+      void callFilterGroupTwo(double gain1, dsp::AudioBlock<float> block, double gain2);
+      void callFilterGroupThree(double gain1, dsp::AudioBlock<float> block, double gain2);
+      void callFilterGroupFour(double gain1, dsp::AudioBlock<float> block, double gain2, double gain3);
     
     float lastSampleRate;
 
