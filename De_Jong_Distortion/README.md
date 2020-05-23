@@ -1,7 +1,7 @@
 # De_Jong_Distortion
  Distortion plugin using the De Jong chaotic map
  
- ![alt text](https://github.com/landonviator/De_Jong_Distortion/blob/master/dejongDistortion.png "Peter De Jong Plugin")
+ ![alt text](https://github.com/landonviator/Plugins/blob/master/De_Jong_Distortion/dejongDistortion.png "Peter De Jong Plugin")
 
 ![alt text](https://d30pueezughrda.cloudfront.net/juce/JUCE_banner.png "JUCE")
 
