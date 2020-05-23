@@ -8,7 +8,7 @@ It also features low-pass and high-pass filters with a 12dB-per-octave slope for
 
 Finally, the eq has a built in clipping function that allows the user to increase the input into the eq to engage harmonic saturation. The harder the input is pushed, the more saturation is achieved.
 
-![alt text](https://github.com/landonviator/Viator_Graphic_EQ/blob/master/viatorGraphicEq.png "Viator Graphic Eq")
+![alt text](https://github.com/landonviator/Plugins/blob/master/Viator_Graphic_EQ/graphicEqBuild.png "Viator Graphic Eq")
 
 ![alt text](https://d30pueezughrda.cloudfront.net/juce/JUCE_banner.png "JUCE")
 
