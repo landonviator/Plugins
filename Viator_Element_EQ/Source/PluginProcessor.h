@@ -12,6 +12,24 @@
 
 #include <JuceHeader.h>
 
+#define subSliderId "subSlider"
+#define subSliderName "SubSlider"
+
+#define bassSliderId "bassSlider"
+#define bassSliderName "BassSlider"
+
+#define earthSliderId "earthSlider"
+#define earthSliderName "EarthSlider"
+
+#define fogSliderId "fogSlider"
+#define fogSliderName "FogSlider"
+
+#define stingSliderId "stingSlider"
+#define stingSliderName "StingSlider"
+
+#define airSliderId "airSlider"
+#define airSliderName "AirSlider"
+
 //==============================================================================
 /**
 */
@@ -55,7 +73,17 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    AudioProcessorValueTreeState treeState;
+    AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    
+    float lastSampleRate;
+    
+    std::vector<dsp::ProcessorDuplicator<dsp::IIR::Filter<float>, dsp::IIR::Coefficients<float>>*> filters;
+    
 private:
+    dsp::ProcessorDuplicator<dsp::IIR::Filter<float>, dsp::IIR::Coefficients<float>>
+    subFilter, bassFilter, earthFilter, fogFilter, stingFilter, airFilter;
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Viator_element_eqAudioProcessor)
 };

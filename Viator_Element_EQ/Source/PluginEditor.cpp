@@ -18,11 +18,13 @@ Viator_element_eqAudioProcessorEditor::Viator_element_eqAudioProcessorEditor (Vi
     int topMargin = 64;
     int leftMargin = 24;
     
+    //Make and optimize a vector for the sliders
     sliders.reserve(6);
     sliders = {
         &subSlider, &bassSlider, &earthSlider, &fogSlider, &stingSlider, &airSlider
     };
     
+    //Make and optimize a vector for the text suffixes
     sliderLabels.reserve(6);
     sliderLabels = {
         " dB\nSub", " dB\nBass", " dB\nEarth", " dB\nFog", " dB\nSting", " dB\nAir"

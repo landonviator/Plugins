@@ -21,13 +21,32 @@ Viator_element_eqAudioProcessor::Viator_element_eqAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+treeState (*this, nullptr, "PARAMETER", createParameterLayout()),
+subFilter(dsp::IIR::Coefficients<float>::makeLowShelf(44100, 80, 1.0, 1.0)),
+bassFilter(dsp::IIR::Coefficients<float>::makePeakFilter(44100, 100, 1.0, 1.0)),
+earthFilter(dsp::IIR::Coefficients<float>::makePeakFilter(44100, 245, 0.75, 1.0)),
+fogFilter(dsp::IIR::Coefficients<float>::makePeakFilter(44100, 835, 0.8, 1.0)),
+stingFilter(dsp::IIR::Coefficients<float>::makePeakFilter(44100, 400, 2.0, 1.0)),
+airFilter(dsp::IIR::Coefficients<float>::makeHighShelf(44100, 6000, 1.0, 1.0))
 #endif
 {
 }
 
 Viator_element_eqAudioProcessor::~Viator_element_eqAudioProcessor()
 {
+}
+
+AudioProcessorValueTreeState::ParameterLayout Viator_element_eqAudioProcessor::createParameterLayout()
+{
+    std::vector <std::unique_ptr<RangedAudioParameter>> params;
+    
+    
+    auto subSliderParam = std::make_unique<AudioParameterFloat>(subSliderId, subSliderName, -12, 12, 0);
+    
+    params.push_back(std::move(subSliderParam));
+    
+    return { params.begin(), params.end() };
 }
 
 //==============================================================================
@@ -95,8 +114,22 @@ void Viator_element_eqAudioProcessor::changeProgramName (int index, const String
 //==============================================================================
 void Viator_element_eqAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    lastSampleRate = sampleRate;
+    dsp::ProcessSpec spec;
+    spec.sampleRate = sampleRate;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.numChannels = getTotalNumOutputChannels();
+    
+    //Make and optimize a vector for the filters
+    filters.reserve(6);
+    filters = {
+        &subFilter, &bassFilter, &earthFilter, &fogFilter, &stingFilter, &airFilter
+    };
+    
+    for (size_t i = 0; i < filters.size(); i++){
+        filters[i]->prepare(spec);
+        filters[i]->reset();
+    }
 }
 
 void Viator_element_eqAudioProcessor::releaseResources()
