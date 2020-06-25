@@ -13,8 +13,6 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="DAW5wv" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
-    <FILE id="IxdUzN" name="AnalogMachineBackground.png" compile="0" resource="1"
-          file="../../../Desktop/AnalogMachineBackground.png"/>
   </MAINGROUP>
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX">

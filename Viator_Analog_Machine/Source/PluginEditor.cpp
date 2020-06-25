@@ -140,8 +140,8 @@ AnalogMachineAudioProcessorEditor::~AnalogMachineAudioProcessorEditor()
 void AnalogMachineAudioProcessorEditor::paint (Graphics& g)
 {
     g.fillAll(Colour::fromFloatRGBA(0.14f, 0.16f, 0.2f, 1.0f));
-    Image background = ImageCache::getFromMemory (BinaryData::AnalogMachineBackground_png, BinaryData::AnalogMachineBackground_pngSize);
-    g.drawImageAt (background, 0, 0);
+    //Image background = ImageCache::getFromMemory (BinaryData::AnalogMachineBackground_png, BinaryData::AnalogMachineBackground_pngSize);
+    //g.drawImageAt (background, 0, 0);
 }
 
 void AnalogMachineAudioProcessorEditor::resized()
