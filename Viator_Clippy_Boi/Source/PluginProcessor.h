@@ -12,33 +12,24 @@
 
 #include <JuceHeader.h>
 
-#define subSliderId "subSlider"
-#define subSliderName "SubSlider"
+#define inputSliderId "input"
+#define inputSliderName "Input"
 
-#define bassSliderId "bassSlider"
-#define bassSliderName "BassSlider"
+#define saturationSliderId "saturation"
+#define saturationSliderName "Saturation"
 
-#define earthSliderId "earthSlider"
-#define earthSliderName "EarthSlider"
-
-#define fogSliderId "fogSlider"
-#define fogSliderName "FogSlider"
-
-#define stingSliderId "stingSlider"
-#define stingSliderName "StingSlider"
-
-#define airSliderId "airSlider"
-#define airSliderName "AirSlider"
+#define outputSliderId "output"
+#define outputSliderName "Output"
 
 //==============================================================================
 /**
 */
-class Viator_element_eqAudioProcessor  : public AudioProcessor
+class Viator_clippy_boiAudioProcessor  : public AudioProcessor
 {
 public:
     //==============================================================================
-    Viator_element_eqAudioProcessor();
-    ~Viator_element_eqAudioProcessor();
+    Viator_clippy_boiAudioProcessor();
+    ~Viator_clippy_boiAudioProcessor();
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -73,30 +64,17 @@ public:
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    void updateSubFilter(float gain);
-    void updateBassFilter(float gain);
-    void updateEarthFilter(float gain);
-    void updateFogFilter(float gain);
-    void updateStingFilter(float gain);
-    void updateAirFilter(float gain);
+    double applySoftClip(double input, double drive);
+    double applyHardClip(double input, double drive);
     
-    void callFilterGroupOne(double gain1, dsp::AudioBlock<float> block, double gain2);
-    void callFilterGroupTwo(double gain1, dsp::AudioBlock<float> block, double gain2);
-    void callFilterGroupThree(double gain1, dsp::AudioBlock<float> block, double gain2);
-    
-    void joinThreads(Thread thread1, Thread thread2, Thread thread3);
+    double piDivisor = 2/M_PI;
 
     AudioProcessorValueTreeState treeState;
     AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     
-    float lastSampleRate;
-    
-    std::vector<dsp::ProcessorDuplicator<dsp::IIR::Filter<float>, dsp::IIR::Coefficients<float>>*> filters;
-    
 private:
-    dsp::ProcessorDuplicator<dsp::IIR::Filter<float>, dsp::IIR::Coefficients<float>>
-    subFilter, bassFilter, earthFilter, fogFilter, stingFilter, airFilter;
+    
     
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Viator_element_eqAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Viator_clippy_boiAudioProcessor)
 };

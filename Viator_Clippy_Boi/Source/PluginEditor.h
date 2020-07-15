@@ -40,30 +40,46 @@ public:
         g.setColour(Colour::fromFloatRGBA(0, 0, 0, .25)); //outline
         g.drawEllipse(rx, ry, diameter, diameter, 1.0f);
     }
+    
+    
 };
 
-class Viator_element_eqAudioProcessorEditor  : public AudioProcessorEditor
+class Viator_clippy_boiAudioProcessorEditor  : public AudioProcessorEditor, Button::Listener, Slider::Listener, ComboBox::Listener
 {
 public:
-    Viator_element_eqAudioProcessorEditor (Viator_element_eqAudioProcessor&);
-    ~Viator_element_eqAudioProcessorEditor();
+    Viator_clippy_boiAudioProcessorEditor (Viator_clippy_boiAudioProcessor&);
+    ~Viator_clippy_boiAudioProcessorEditor();
 
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
+    void sliderValueChanged(Slider *slider) override;
+    void buttonClicked(Button* button) override;
+    void comboBoxChanged(ComboBox* comboBoxThatHasChanged) override;
     
-    Slider subSlider, bassSlider, earthSlider, fogSlider, stingSlider, airSlider;
-    std::unique_ptr <AudioProcessorValueTreeState::SliderAttachment>
-    subAttach, bassAttach, earthAttach, fogAttach, stingAttach, airAttach;
+    GroupComponent saturationGroup;
     
-    std::vector<Slider*> sliders;
+    Slider inGainSlider, inGainTrack, saturationSlider, saturationTrack, trimSlider, trimTrack;
+    
+    TextButton  forcedButton;
+    
+    ComboBox saturationModel;
+    
+    ToggleButton autoButton;
     
     OtherLookAndFeel otherLookAndFeel;
+    
+    std::vector<TextButton*> buttons;
+    std::vector<Slider*> sliders;
+    std::vector<Slider*> tracks;
+    
+    std::unique_ptr <AudioProcessorValueTreeState::SliderAttachment> inputAttach, saturationAttach, outputAttach;
 
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    Viator_element_eqAudioProcessor& processor;
+    Viator_clippy_boiAudioProcessor& processor;
+    
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Viator_element_eqAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Viator_clippy_boiAudioProcessorEditor)
 };

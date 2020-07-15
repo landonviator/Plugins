@@ -24,12 +24,9 @@ Viator_element_eqAudioProcessorEditor::Viator_element_eqAudioProcessorEditor (Vi
         &subSlider, &bassSlider, &earthSlider, &fogSlider, &stingSlider, &airSlider
     };
     
-    //Make and optimize a vector for the text suffixes
-    sliderLabels.reserve(6);
-    sliderLabels = {
-        " dB\nSub", " dB\nBass", " dB\nEarth", " dB\nFog", " dB\nSting", " dB\nAir"
-    };
     
+    
+    //All slider attributes except attachments
     for (size_t i = 0; i < sliders.size(); i++) {
         addAndMakeVisible(sliders[i]);
         sliders[i]->setRange(-12, 12, .1);
@@ -39,11 +36,29 @@ Viator_element_eqAudioProcessorEditor::Viator_element_eqAudioProcessorEditor (Vi
         sliders[i]->setColour(0x1001400, Colour::fromFloatRGBA(1.0, 1.0, 1.0, 0.5)); //text box text
         sliders[i]->setLookAndFeel(&otherLookAndFeel);
         sliders[i]->setDoubleClickReturnValue(true, 0);
-        sliders[i]->setTextValueSuffix(sliderLabels[i]);
+        sliders[i]->setTextValueSuffix(" dB");
+        
         if (sliders[i] == &subSlider){
             sliders[i]->setBounds(leftMargin, topMargin, 148, 148);
         } else {
             sliders[i]->setBounds(sliders[i - 1]->getX() + 128, topMargin, 148, 148);
+        }
+    }
+    
+    //Set up all slider attachments
+    for (size_t i = 0; i < sliders.size(); i++) {
+        if (sliders[i] == &subSlider){
+            subAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.treeState, subSliderId, subSlider);
+        } else if (sliders[i] == &bassSlider){
+            bassAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.treeState, bassSliderId, bassSlider);
+        } else if (sliders[i] == &earthSlider){
+            earthAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.treeState, earthSliderId, earthSlider);
+        } else if (sliders[i] == &fogSlider){
+            fogAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.treeState, fogSliderId, fogSlider);
+        } else if (sliders[i] == &stingSlider){
+            stingAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.treeState, stingSliderId, stingSlider);
+        } else {
+            airAttach = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.treeState, airSliderId, airSlider);
         }
     }
     
