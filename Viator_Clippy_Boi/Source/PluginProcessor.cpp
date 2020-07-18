@@ -38,10 +38,12 @@ AudioProcessorValueTreeState::ParameterLayout Viator_clippy_boiAudioProcessor::c
     auto inputSliderParam = std::make_unique<AudioParameterFloat>(inputSliderId, inputSliderName, -24, 24, 0);
     auto saturationSliderParam = std::make_unique<AudioParameterFloat>(saturationSliderId, saturationSliderName, 0, 24, 0);
     auto outputSliderParam = std::make_unique<AudioParameterFloat>(outputSliderId, outputSliderName, -24, 24, 0);
+    auto saturationModelParam = std::make_unique<AudioParameterInt>(saturationModelId, saturationModelName, 0, 1, 0);
     
     params.push_back(std::move(inputSliderParam));
     params.push_back(std::move(saturationSliderParam));
     params.push_back(std::move(outputSliderParam));
+    params.push_back(std::move(saturationModelParam));
     
     return { params.begin(), params.end() };
 }
@@ -150,25 +152,28 @@ void Viator_clippy_boiAudioProcessor::processBlock (AudioBuffer<float>& buffer, 
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
+    
+    auto* rawVoice = treeState.getRawParameterValue(saturationModelId);
+    auto* rawInput = treeState.getRawParameterValue(inputSliderId);
+    auto* rawSaturation = treeState.getRawParameterValue(saturationSliderId);
+    auto* rawOutput = treeState.getRawParameterValue(outputSliderId);
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        auto* channelData = buffer.getWritePointer (channel);
+        auto* inputData = buffer.getReadPointer (channel);
+        auto* outputData = buffer.getWritePointer(channel);
 
-        //Two clipping models
-        //Soft
-        //(2/pi) * atan(input * pow(10, (drive * .05)))
-        //Hard, drive is a multiplier of the input before the clipping
-//        if (input > 1){
-//            input = 1;
-//        }
-//        if (input < -1){
-//            input = -1;
-//        }
-//        out1 = 1.5 * input - .5 * pow(input, 3);
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+        {
+            if (*rawVoice == 0){
+                outputData[sample] = applySoftClip(inputData[sample], pow(10, *rawSaturation * 0.05));
+            } else {
+                outputData[sample] = applyHardClip(inputData[sample], pow(10, *rawSaturation * 0.05));
+            }
+        }
     }
 }
 

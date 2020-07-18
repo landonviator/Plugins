@@ -21,6 +21,9 @@
 #define outputSliderId "output"
 #define outputSliderName "Output"
 
+#define saturationModelId "voice"
+#define saturationModelName "Voice"
+
 //==============================================================================
 /**
 */

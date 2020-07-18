@@ -105,6 +105,7 @@ Viator_clippy_boiAudioProcessorEditor::Viator_clippy_boiAudioProcessorEditor (Vi
         saturationModel.addItem("Hard", 2);
         saturationModel.setText("Model");
         saturationModel.addListener(this);
+        saturationModelAttach = std::make_unique<AudioProcessorValueTreeState::ComboBoxAttachment>(processor.treeState, saturationModelId, saturationModel);
         saturationModel.setColour(0x1000b00, Colour::fromFloatRGBA(0, 0, 0, 0));
         saturationModel.setColour(0x1000a00, Colour::fromFloatRGBA(1, 1, 1, 0.5f));
         saturationModel.setColour(0x1000c00, Colour::fromFloatRGBA(1, 1, 1, 0.5f));
@@ -154,5 +155,7 @@ void Viator_clippy_boiAudioProcessorEditor::buttonClicked(Button *button){
 }
 
 void Viator_clippy_boiAudioProcessorEditor::comboBoxChanged(ComboBox *comboBoxThatHasChanged){
-    
+    if (comboBoxThatHasChanged == &saturationModel){
+        
+    }
 }

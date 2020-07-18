@@ -74,6 +74,7 @@ public:
     std::vector<Slider*> tracks;
     
     std::unique_ptr <AudioProcessorValueTreeState::SliderAttachment> inputAttach, saturationAttach, outputAttach;
+    std::unique_ptr <AudioProcessorValueTreeState::ComboBoxAttachment> saturationModelAttach;
 
 private:
     // This reference is provided as a quick way for your editor to
